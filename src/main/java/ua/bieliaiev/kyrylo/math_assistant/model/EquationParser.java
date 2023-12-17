@@ -2,7 +2,6 @@ package ua.bieliaiev.kyrylo.math_assistant.model;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,8 +16,6 @@ public class EquationParser {
 	   Group 3 defines closing parentheses. Group 4 defines next operation sign.
 	 */
 	private static final Pattern equationPattern = Pattern.compile("(-?[(]*)(-?[0-9.x]+)([)]*)([*/+-]?)");
-
-	private static final Set<Character> operations = Set.of('+', '-', '*', '/');
 
 
 	/**
@@ -128,7 +125,7 @@ public class EquationParser {
 	 */
 	private static boolean checkEquation(String equation) {
 
-		return !operations.contains(equation.charAt(equation.length() - 1));
+		return Operation.getInstanceByChar(equation.substring(equation.length() - 1)) == null;
 	}
 
 	/**

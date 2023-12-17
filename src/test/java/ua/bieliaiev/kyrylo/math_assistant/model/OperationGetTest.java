@@ -9,7 +9,7 @@ public class OperationGetTest {
 	@Test
 	public void getPlusOperation() {
 
-		char operator = '+';
+		String operator = "+";
 
 		Operation expectedOperation = Operation.getInstanceByChar(operator);
 
@@ -19,7 +19,7 @@ public class OperationGetTest {
 	@Test
 	public void getDivisionOperation() {
 
-		char operator = '/';
+		String operator = "/";
 
 		Operation expectedOperation = Operation.getInstanceByChar(operator);
 
@@ -29,7 +29,7 @@ public class OperationGetTest {
 	@Test
 	public void getNoneExistingOperation() {
 
-		char operator = '^';
+		String operator = "^";
 
 		Operation expectedOperation = Operation.getInstanceByChar(operator);
 

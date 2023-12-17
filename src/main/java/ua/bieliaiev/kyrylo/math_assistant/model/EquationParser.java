@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 
 public class EquationParser {
 
-	// Defines a pattern, that checks for incorrect symbols.
-	private static final Pattern incorrectSymbols = Pattern.compile("[^0-9.x=()/*+-]");
+	// Defines a pattern, that checks for incorrect symbols. (also included 'х' in Cyrillic script)
+	private static final Pattern incorrectSymbols = Pattern.compile("[^0-9.xх=()/*+-]");
 
 	/* Defines a pattern, that used for mather.find() iteration.
 	   Group 1 defines opening parentheses with possibility of unary minus.

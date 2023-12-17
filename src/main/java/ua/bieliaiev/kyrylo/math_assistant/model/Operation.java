@@ -1,6 +1,7 @@
 package ua.bieliaiev.kyrylo.math_assistant.model;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Arrays;
 import java.util.function.BinaryOperator;
 
@@ -8,7 +9,7 @@ public enum Operation {
 	PLUS("+", BigDecimal::add, 1),
 	MINUS("-", BigDecimal::subtract, 1),
 	MULTIPLICATION("*", BigDecimal::multiply, 2),
-	DIVISION("/", BigDecimal::divide, 2);
+	DIVISION("/", (bigDecimal, divisor) -> bigDecimal.divide(divisor, MathContext.DECIMAL64), 2);
 
 	/* Char that represents operation */
 	private final String operationSign;

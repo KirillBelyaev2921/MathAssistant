@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 
 public class EquationParser {
 
-	// Defines a pattern, that checks for incorrect symbols. (also included 'х' in Cyrillic script)
-	private static final Pattern incorrectSymbols = Pattern.compile("[^0-9.xх=()/*+-]");
+	// Defines a pattern, that checks for incorrect symbols.
+	private static final Pattern incorrectSymbols = Pattern.compile("[^0-9.x=()/*+-]");
 
 	/* Defines a pattern, that used for mather.find() iteration.
 	   Group 1 defines opening parentheses with possibility of unary minus.
@@ -30,6 +30,8 @@ public class EquationParser {
 	public static String getReversePolishNotation(String equation) {
 
 		String newEquation = equation.replace(" ", "");
+		// Replace 'x' in Cyrillic script on normal 'x'
+		newEquation = newEquation.replace("х", "x");
 
 		checkIsSymbolsCorrect(newEquation);
 		if (!isParenthesesCorrect(equation))
@@ -37,7 +39,6 @@ public class EquationParser {
 		if (!newEquation.contains("x")) {
 			throw new IllegalArgumentException("No x variable");
 		}
-
 
 		String[] equations = newEquation.split("=");
 

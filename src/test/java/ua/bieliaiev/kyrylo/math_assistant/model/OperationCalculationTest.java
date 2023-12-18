@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OperationCalculationTest {
 
@@ -68,6 +67,17 @@ public class OperationCalculationTest {
 
 		assertEquals(result, new BigDecimal("2.4"));
 	}
+	@Test
+	public void doubleDivisionOperationWithDoubles() {
+
+		Operation operation = Operation.DIVISION;
+		BigDecimal firstNumber = new BigDecimal("6.0");
+		BigDecimal secondNumber = new BigDecimal("3.0");
+
+		BigDecimal result = operation.operate(firstNumber, secondNumber);
+
+		assertEquals(result, new BigDecimal("2"));
+	}
 
 	@Test
 	public void divisionByZero() {
@@ -76,10 +86,7 @@ public class OperationCalculationTest {
 		BigDecimal firstNumber = new BigDecimal(12);
 		BigDecimal secondNumber = new BigDecimal(0);
 
-		try {
-			BigDecimal result = operation.operate(firstNumber, secondNumber);
-			fail();
-		} catch (ArithmeticException ignored) {}
+		assertThrows(ArithmeticException.class,() -> operation.operate(firstNumber, secondNumber));
 
 	}
 

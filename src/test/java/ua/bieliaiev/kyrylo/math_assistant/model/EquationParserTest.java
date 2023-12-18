@@ -88,6 +88,12 @@ class EquationParserTest {
 		assertEquals(result, "12,x,*,12,-");
 	}
 	@Test
+	public void getReversePolishNotationCyrillicX() {
+		String equation = "12*х=12";
+		String result = EquationParser.getReversePolishNotation(equation);
+		assertEquals(result, "12,x,*,12,-");
+	}
+	@Test
 	public void getReversePolishNotationWithSimpleEquationWithSpaces() {
 		String equation = "12 * x = 12";
 		String result = EquationParser.getReversePolishNotation(equation);

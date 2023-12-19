@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/math_assistant</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="math_assistant_test@localhost" uuid="cd8d895d-c7c2-4d83-8dec-845fef24c787">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/math_assistant_test</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

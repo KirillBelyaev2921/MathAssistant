@@ -64,7 +64,7 @@ class EquationDaoTest {
 		String equationString = "x*x=4";
 		String reversePolishNotation = EquationParser.getReversePolishNotation(equationString);
 		Equation equation = new Equation(0, equationString, reversePolishNotation,
-				List.of(new BigDecimal("2.0"), new BigDecimal("-2.0")));
+				List.of(new BigDecimal(2), new BigDecimal(-2)));
 
 		int id = equationDao.saveEquation(equation).orElse(0);
 
@@ -76,7 +76,7 @@ class EquationDaoTest {
 		String equationString = "x*x=4";
 		String reversePolishNotation = EquationParser.getReversePolishNotation(equationString);
 		Equation equation = new Equation(0, equationString, reversePolishNotation,
-				List.of(new BigDecimal("2.0"), new BigDecimal("-2.0")));
+				List.of(new BigDecimal(2), new BigDecimal(-2)));
 
 		equationDao.saveEquation(equation);
 		equationDao.getEquationByEquationString(equationString).ifPresentOrElse(e -> assertEquals(e.roots(), equation.roots()),
@@ -88,7 +88,21 @@ class EquationDaoTest {
 		String equationString = "x*x=4";
 		String reversePolishNotation = EquationParser.getReversePolishNotation(equationString);
 		Equation equation = new Equation(0, equationString, reversePolishNotation,
-				List.of(new BigDecimal("2.0"), new BigDecimal("-2.0")));
+				List.of(new BigDecimal(2), new BigDecimal(-2)));
+
+		int id = equationDao.saveEquation(equation).orElse(0);
+		equationDao.getEquationByEquationString(equationString).ifPresentOrElse(e -> assertEquals(e, equation),
+				Assertions::fail);
+
+		assertNotEquals(id, 0);
+	}
+
+	@Test
+	void getEquationWithDoubleRoot() {
+		String equationString = "x*x=5";
+		String reversePolishNotation = EquationParser.getReversePolishNotation(equationString);
+		Equation equation = new Equation(0, equationString, reversePolishNotation,
+				List.of(new BigDecimal("2.2360679774997896964091736687313"), new BigDecimal("-2.2360679774997896964091736687313")));
 
 		int id = equationDao.saveEquation(equation).orElse(0);
 		equationDao.getEquationByEquationString(equationString).ifPresentOrElse(e -> assertEquals(e, equation),
@@ -119,7 +133,7 @@ class EquationDaoTest {
 		String equationString = "x*x=4";
 		String reversePolishNotation = EquationParser.getReversePolishNotation(equationString);
 		Equation equation = new Equation(0, equationString, reversePolishNotation,
-				List.of(new BigDecimal("2.0"), new BigDecimal("-2.0")));
+				List.of(new BigDecimal(2), new BigDecimal(-2)));
 
 		equationDao.saveEquation(equation);
 
@@ -134,7 +148,7 @@ class EquationDaoTest {
 		String equationString = "x*x=4";
 		String reversePolishNotation = EquationParser.getReversePolishNotation(equationString);
 		Equation equation = new Equation(0, equationString, reversePolishNotation,
-				List.of(new BigDecimal("2.0"), new BigDecimal("-2.0")));
+				List.of(new BigDecimal(2), new BigDecimal(-2)));
 		equations.add(equation);
 		equationDao.saveEquation(equation);
 
@@ -155,7 +169,7 @@ class EquationDaoTest {
 
 		String equationString = "x*x=4";
 		Equation equation = new Equation(0, equationString, EquationParser.getReversePolishNotation(equationString),
-				List.of(new BigDecimal("2.0"), new BigDecimal("-2.0")));
+				List.of(new BigDecimal(2), new BigDecimal(-2)));
 		equations.add(equation);
 		equationDao.saveEquation(equation);
 
@@ -173,7 +187,7 @@ class EquationDaoTest {
 
 		equationString = "2*x+5=17";
 		equation = new Equation(0, equationString, EquationParser.getReversePolishNotation(equationString),
-				List.of(new BigDecimal("6.0")));
+				List.of(new BigDecimal("6")));
 		equations.add(equation);
 		equationDao.saveEquation(equation);
 
@@ -200,7 +214,7 @@ class EquationDaoTest {
 		String equationString = "x*x=4";
 		String reversePolishNotation = EquationParser.getReversePolishNotation(equationString);
 		Equation equation = new Equation(0, equationString, reversePolishNotation,
-				List.of(new BigDecimal("2.0"), new BigDecimal("-2.0")));
+				List.of(new BigDecimal(2), new BigDecimal(-2)));
 		equations.add(equation);
 		equationDao.saveEquation(equation);
 
@@ -210,7 +224,7 @@ class EquationDaoTest {
 				List.of());
 		equationDao.saveEquation(equation);
 
-		List<Equation> returnedEquations = new ArrayList<>(equationDao.getAllEquationsByRoot(new BigDecimal("2.0")));
+		List<Equation> returnedEquations = new ArrayList<>(equationDao.getAllEquationsByRoot(new BigDecimal(2)));
 		assertThat(equations, Matchers.containsInAnyOrder(returnedEquations.toArray()));
 	}
 
@@ -220,7 +234,7 @@ class EquationDaoTest {
 
 		String equationString = "x*x=4";
 		Equation equation = new Equation(0, equationString, EquationParser.getReversePolishNotation(equationString),
-				List.of(new BigDecimal("2.0"), new BigDecimal("-2.0")));
+				List.of(new BigDecimal(2), new BigDecimal(-2)));
 		equationDao.saveEquation(equation);
 
 		equationString = "12*x=4";
@@ -235,7 +249,7 @@ class EquationDaoTest {
 
 		equationString = "2*x+5=17";
 		equation = new Equation(0, equationString, EquationParser.getReversePolishNotation(equationString),
-				List.of(new BigDecimal("6.0")));
+				List.of(new BigDecimal("6")));
 		equations.add(equation);
 		equationDao.saveEquation(equation);
 
@@ -246,11 +260,11 @@ class EquationDaoTest {
 
 		equationString = "17=2*x+5";
 		equation = new Equation(0, equationString, EquationParser.getReversePolishNotation(equationString),
-				List.of(new BigDecimal("6.0")));
+				List.of(new BigDecimal("6")));
 		equations.add(equation);
 		equationDao.saveEquation(equation);
 
-		List<Equation> returnedEquations = new ArrayList<>(equationDao.getAllEquationsByRoot(new BigDecimal("6.0")));
+		List<Equation> returnedEquations = new ArrayList<>(equationDao.getAllEquationsByRoot(new BigDecimal("6")));
 		assertThat(equations, Matchers.containsInAnyOrder(returnedEquations.toArray()));
 	}
 

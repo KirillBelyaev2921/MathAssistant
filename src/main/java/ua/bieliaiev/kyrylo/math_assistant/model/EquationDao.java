@@ -66,7 +66,7 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 			try (PreparedStatement statement = connection.prepareStatement(
 					query, Statement.RETURN_GENERATED_KEYS)) {
 
-				statement.setString(1, root.toString());
+				statement.setString(1, root.stripTrailingZeros().toPlainString());
 				statement.setInt(2, id);
 				statement.executeUpdate();
 
@@ -140,7 +140,7 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 
 	@Override
 	public Collection<Equation> getAllEquationsByRoot(BigDecimal root) {
-		
+
 		Collection<Equation> equations;
 
 		String query = """
@@ -149,7 +149,7 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 				    SELECT e.equation_id
 				    FROM equations e INNER JOIN roots r on e.equation_id = r.equation_id WHERE r.root_value='%s'
 				) AS fr WHERE e.equation_id=fr.equation_id;
-				""".formatted(root);
+				""".formatted(root.stripTrailingZeros().toPlainString());
 
 		try (Statement statement = connection.createStatement();
 			 ResultSet resultSet = statement.executeQuery(query)) {

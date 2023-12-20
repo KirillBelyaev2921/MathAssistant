@@ -42,7 +42,7 @@ class EquationsControllerTest {
 					CREATE TABLE IF NOT EXISTS equations(
 					    equation_id integer NOT NULL GENERATED ALWAYS AS IDENTITY (START 1 INCREMENT 1 ),
 					    equation_string character varying(255) NOT NULL UNIQUE,
-					    rev_polish_notation character varying(255) NOT NULL,
+					    rev_polish_notation character varying(255) NOT NULL UNIQUE,
 					    CONSTRAINT equation_pkey PRIMARY KEY (equation_id)
 					);
 					     

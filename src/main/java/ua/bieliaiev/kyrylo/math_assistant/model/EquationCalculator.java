@@ -11,11 +11,13 @@ public class EquationCalculator {
 	 *
 	 * @param equation string equation in reverse Polish notation with ',' delimiter
 	 * @param x        value of x variable
-	 * @return true if value of variable x is the root of the equation, false otherwise
+	 * @return 0 if value of variable x is the root of the equation, difference otherwise
 	 */
-	public static boolean isCorrectRootOfEquation(String equation, BigDecimal x) {
+	public static double isCorrectRootOfEquation(String equation, BigDecimal x) {
 
-		return calculateReversePolishNotationWithX(equation, x).abs().doubleValue() < 1e-9;
+		double value = calculateReversePolishNotationWithX(equation, x).abs().doubleValue();
+
+		return value < 1e-9 ? 0 : value;
 	}
 
 	/**

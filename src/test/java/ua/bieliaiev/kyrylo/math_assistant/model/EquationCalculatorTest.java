@@ -14,43 +14,43 @@ class EquationCalculatorTest {
 	@Test
 	void isCorrectRootOfEquation() {
 		String notation = EquationParser.getReversePolishNotation("12*x=12");
-		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("1"));
+		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("1")) == 0;
 		assertTrue(result);
 	}
 	@Test
 	void isCorrectRootOfEquation2() {
 		String notation = EquationParser.getReversePolishNotation("2*x+5=17");
-		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("6"));
+		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("6")) == 0;
 		assertTrue(result);
 	}
 	@Test
 	void isNotCorrectRootOfEquation2() {
 		String notation = EquationParser.getReversePolishNotation("2*x+5=17");
-		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("1"));
+		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("1")) == 0;
 		assertFalse(result);
 	}
 	@Test
 	void isCorrectRootOfEquation3() {
 		String notation = EquationParser.getReversePolishNotation("-1.3*5/x=1.2");
-		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("-5.416666666666"));
+		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("-5.416666666666")) == 0;
 		assertTrue(result);
 	}
 	@Test
 	void isCorrectRootOfEquation4() {
 		String notation = EquationParser.getReversePolishNotation("2*x*x=10");
-		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("2.236067977499"));
+		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("2.236067977499")) == 0;
 		assertTrue(result);
 	}
 	@Test
 	void isCorrectRootOfEquation5() {
 		String notation = EquationParser.getReversePolishNotation("2*(x+5+x)+5=10");
-		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("-1.25"));
+		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("-1.25")) == 0;
 		assertTrue(result);
 	}
 	@Test
 	void isCorrectRootOfEquation6() {
 		String notation = EquationParser.getReversePolishNotation(" 17=2*x+5 ");
-		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("6"));
+		boolean result = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal("6")) == 0;
 		assertTrue(result);
 	}
 

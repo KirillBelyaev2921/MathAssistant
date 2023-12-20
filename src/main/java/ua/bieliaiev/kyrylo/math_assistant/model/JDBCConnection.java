@@ -10,7 +10,7 @@ public class JDBCConnection {
 	private static Connection connection = null;
 
 	public static synchronized Connection getConnection(Properties properties) throws SQLException {
-		if (connection == null) {
+		if (connection == null || connection.isClosed()) {
 
 			String url = properties.getProperty("url");
 			String user = properties.getProperty("user");

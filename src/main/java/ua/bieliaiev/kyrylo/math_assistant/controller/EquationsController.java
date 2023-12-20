@@ -5,11 +5,7 @@ import ua.bieliaiev.kyrylo.math_assistant.model.EquationCalculator;
 import ua.bieliaiev.kyrylo.math_assistant.model.EquationDao;
 import ua.bieliaiev.kyrylo.math_assistant.model.EquationParser;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,51 +17,44 @@ public class EquationsController {
 
 	private final EquationDao equationDao;
 
-	public EquationsController() {
-		Properties properties = new Properties();
+	public EquationsController(Properties properties) {
 		try {
-			properties.load(Files.newInputStream(Path.of("src/main/resources/database.properties"),
-					StandardOpenOption.READ));
 			equationDao = new EquationDao(properties);
-		} catch (IOException | SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	public String saveEquation(String equation) {
 
-		String notation;
-		try {
-			notation = EquationParser.getReversePolishNotation(equation);
-		} catch (Exception e) {
-			return e.getMessage();
-		}
-
-		Equation newEquation = new Equation(0, equation, notation, new ArrayList<>());
-		Optional<Integer> result = equationDao.saveEquation(newEquation);
-
-		if (result.isPresent()) {
-			return "Saved successfully";
-		} else {
-			return "Not saved";
-		}
+		return saveEquationWithRoot(equation, "");
 	}
 
-	public String saveRootOfEquation(String equation, String x) {
+	public String saveEquationWithRoot(String equation, String x) {
 
 		String notation;
-		double isRoot;
+		List<BigDecimal> roots = new ArrayList<>();
 		try {
 			notation = EquationParser.getReversePolishNotation(equation);
-			isRoot = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal(x));
 		} catch (Exception e) {
 			return e.getMessage();
 		}
-		if (isRoot != 0) {
-			return x + " is not root of this equation, the difference is " + isRoot;
+
+		if (!x.isBlank()) {
+			double isRoot;
+			try {
+				isRoot = EquationCalculator.isCorrectRootOfEquation(notation, new BigDecimal(x));
+			} catch (Exception e) {
+				return e.getMessage();
+			}
+			if (isRoot != 0) {
+				return x + " is not root of this equation, the difference is " + isRoot;
+			} else {
+				roots.add(new BigDecimal(x));
+			}
 		}
 
-		Equation newEquation = new Equation(0, equation, notation, List.of(new BigDecimal(x)));
+		Equation newEquation = new Equation(0, equation, notation, roots);
 		Optional<Integer> result = equationDao.saveEquation(newEquation);
 
 		if (result.isPresent()) {

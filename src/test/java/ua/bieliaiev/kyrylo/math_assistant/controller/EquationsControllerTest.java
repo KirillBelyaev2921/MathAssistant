@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class EquationsControllerTest {
 
 	private static Connection connection;
-	private static final EquationsController controller = new EquationsController();
+	private static EquationsController controller;
 
 	@BeforeAll
 	static void createTables() {
@@ -36,6 +36,7 @@ class EquationsControllerTest {
 			throw new RuntimeException(e);
 		}
 		try {
+			controller = new EquationsController(properties);
 			connection = JDBCConnection.getConnection(properties);
 			String tables = """
 					CREATE TABLE IF NOT EXISTS equations(
@@ -153,28 +154,28 @@ class EquationsControllerTest {
 	@Test
 	void saveRootOfEquation() {
 		String equation = "12*x=12";
-		String result = controller.saveRootOfEquation(equation, "1");
+		String result = controller.saveEquationWithRoot(equation, "1");
 		assertEquals(result, "Saved successfully");
 	}
 	@Test
 	void saveWrongRootOfEquation() {
 		String equation = "12*x=12";
-		String result = controller.saveRootOfEquation(equation, "2");
+		String result = controller.saveEquationWithRoot(equation, "2");
 		assertEquals(result, "2 is not root of this equation, the difference is 12.0");
 	}
 	@Test
 	void saveWrongRootOfEquation2() {
 		String equation = "12*x=12";
-		String result = controller.saveRootOfEquation(equation, "x");
+		String result = controller.saveEquationWithRoot(equation, "x");
 		assertEquals(result, "Character x is neither a decimal digit number, decimal point, nor \"e\" notation exponential mark.");
 	}
 
 	@Test
 	void saveTwoRootsOfEquation() {
 		String equation = "x*x=4";
-		String result = controller.saveRootOfEquation(equation, "2");
+		String result = controller.saveEquationWithRoot(equation, "2");
 		assertEquals(result, "Saved successfully");
-		result = controller.saveRootOfEquation(equation, "-2");
+		result = controller.saveEquationWithRoot(equation, "-2");
 
 		assertEquals(result, "Saved successfully");
 	}
@@ -182,8 +183,8 @@ class EquationsControllerTest {
 	@Test
 	void getAllEquationsWhenOne() {
 		String equation = "x*x=4";
-		controller.saveRootOfEquation(equation, "2");
-		controller.saveRootOfEquation(equation, "-2");
+		controller.saveEquationWithRoot(equation, "2");
+		controller.saveEquationWithRoot(equation, "-2");
 		List<String> result = controller.getAllEquations();
 		assertThat(result, Matchers.containsInAnyOrder(List.of(equation).toArray()));
 	}
@@ -191,8 +192,8 @@ class EquationsControllerTest {
 	@Test
 	void getAllEquationsWhenTwo() {
 		String equation = "x*x=4";
-		controller.saveRootOfEquation(equation, "2");
-		controller.saveRootOfEquation(equation, "-2");
+		controller.saveEquationWithRoot(equation, "2");
+		controller.saveEquationWithRoot(equation, "-2");
 
 		String secondEquation = "12+x=1";
 		controller.saveEquation(secondEquation);
@@ -203,13 +204,13 @@ class EquationsControllerTest {
 	@Test
 	void getAllEquationsWhenThree() {
 		String equation = "x*x=4";
-		controller.saveRootOfEquation(equation, "2");
-		controller.saveRootOfEquation(equation, "-2");
+		controller.saveEquationWithRoot(equation, "2");
+		controller.saveEquationWithRoot(equation, "-2");
 
 		String secondEquation = "12+x=1";
 		controller.saveEquation(secondEquation);
 		String thirdEquation = "12*x=12";
-		controller.saveRootOfEquation(thirdEquation, "1");
+		controller.saveEquationWithRoot(thirdEquation, "1");
 		List<String> result = controller.getAllEquations();
 		assertThat(result, Matchers.containsInAnyOrder(List.of(equation, secondEquation, thirdEquation).toArray()));
 	}
@@ -217,36 +218,36 @@ class EquationsControllerTest {
 	@Test
 	void getAllEquationsByRoot() {
 		String equation = "x*x=4";
-		controller.saveRootOfEquation(equation, "2");
-		controller.saveRootOfEquation(equation, "-2");
+		controller.saveEquationWithRoot(equation, "2");
+		controller.saveEquationWithRoot(equation, "-2");
 		List<String> result = controller.getAllEquationsByRoot("2");
 		assertThat(result, Matchers.containsInAnyOrder(List.of(equation).toArray()));
 	}
 	@Test
 	void getOneEquationByRootWithOthers() {
 		String equation = "x*x=4";
-		controller.saveRootOfEquation(equation, "2");
-		controller.saveRootOfEquation(equation, "-2");
+		controller.saveEquationWithRoot(equation, "2");
+		controller.saveEquationWithRoot(equation, "-2");
 
 		String secondEquation = "12+x=1";
 		controller.saveEquation(secondEquation);
 		String thirdEquation = "12*x=12";
-		controller.saveRootOfEquation(thirdEquation, "1");
+		controller.saveEquationWithRoot(thirdEquation, "1");
 		List<String> result = controller.getAllEquationsByRoot("2");
 		assertThat(result, Matchers.containsInAnyOrder(List.of(equation).toArray()));
 	}
 	@Test
 	void getTwoEquationsByRootWithOthers() {
 		String equation = "x*x=4";
-		controller.saveRootOfEquation(equation, "2");
-		controller.saveRootOfEquation(equation, "-2");
+		controller.saveEquationWithRoot(equation, "2");
+		controller.saveEquationWithRoot(equation, "-2");
 
 		String secondEquation = "12+x=1";
 		controller.saveEquation(secondEquation);
 		String thirdEquation = "12*x=12";
-		controller.saveRootOfEquation(thirdEquation, "1");
+		controller.saveEquationWithRoot(thirdEquation, "1");
 		String fourthEquation = "10+x=12";
-		controller.saveRootOfEquation(fourthEquation, "2");
+		controller.saveEquationWithRoot(fourthEquation, "2");
 		List<String> result = controller.getAllEquationsByRoot("2");
 		assertThat(result, Matchers.containsInAnyOrder(List.of(equation, fourthEquation).toArray()));
 	}
@@ -262,7 +263,7 @@ class EquationsControllerTest {
 	@Test
 	void getOneRootOfEquation() {
 		String equation = "x*x=4";
-		controller.saveRootOfEquation(equation, "2");
+		controller.saveEquationWithRoot(equation, "2");
 
 		List<String> result = controller.getAllRootsOfEquation(equation);
 		assertThat(result, Matchers.containsInAnyOrder(List.of("2").toArray()));
@@ -271,8 +272,8 @@ class EquationsControllerTest {
 	@Test
 	void getTwoRootsOfEquation() {
 		String equation = "x*x=4";
-		controller.saveRootOfEquation(equation, "2");
-		controller.saveRootOfEquation(equation, "-2");
+		controller.saveEquationWithRoot(equation, "2");
+		controller.saveEquationWithRoot(equation, "-2");
 
 		List<String> result = controller.getAllRootsOfEquation(equation);
 		assertThat(result, Matchers.containsInAnyOrder(List.of("2", "-2").toArray()));

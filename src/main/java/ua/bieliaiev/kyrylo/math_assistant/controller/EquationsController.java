@@ -25,11 +25,24 @@ public class EquationsController {
 		}
 	}
 
+	/**
+	 * Save equation without roots to database.
+	 *
+	 * @param equation equation string to save,
+	 * @return "Saved successfully" if was added, or it is already present, or other string if problem occurred.
+	 */
 	public String saveEquation(String equation) {
 
 		return saveEquationWithRoot(equation, "");
 	}
 
+	/**
+	 * Save equation with roots to database.
+	 *
+	 * @param equation equation string to save,
+	 * @param x root of equation to add.
+	 * @return "Saved successfully" if was added, or other string if problem occurred.
+	 */
 	public String saveEquationWithRoot(String equation, String x) {
 
 		String notation;
@@ -64,12 +77,24 @@ public class EquationsController {
 		}
 	}
 
+
+	/**
+	 * Get all equations from database as a list.
+	 *
+	 * @return List of equation strings.
+	 */
 	public List<String> getAllEquations() {
 		return equationDao.getAllEquations().stream()
 				.map(Equation::equation)
 				.toList();
 	}
 
+	/**
+	 * Get all equations with specified root from database as a list.
+	 *
+	 * @param x root of equation.
+	 * @return List of equation strings.
+	 */
 	public List<String> getAllEquationsByRoot(String x) {
 		return equationDao.getAllEquationsByRoot(new BigDecimal(x))
 				.stream()
@@ -77,6 +102,12 @@ public class EquationsController {
 				.toList();
 	}
 
+	/**
+	 * Get all roots of specified equation from database as a list.
+	 *
+	 * @param equation equation string.
+	 * @return List of roots of equation.
+	 */
 	public List<String> getAllRootsOfEquation(String equation) {
 		return equationDao.getEquationByEquationString(equation)
 				.stream()

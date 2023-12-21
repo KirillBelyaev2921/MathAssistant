@@ -9,6 +9,13 @@ public class JDBCConnection {
 
 	private static Connection connection = null;
 
+	/**
+	 * Singleton to get connection.
+	 *
+	 * @param properties Properties that contains url, user and password to connect to db.
+	 * @return Connection do database.
+	 * @throws SQLException throws SQLException if there are some problem with it.
+	 */
 	public static synchronized Connection getConnection(Properties properties) throws SQLException {
 		if (connection == null || connection.isClosed()) {
 

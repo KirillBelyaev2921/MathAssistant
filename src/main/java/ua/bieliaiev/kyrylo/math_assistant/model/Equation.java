@@ -4,6 +4,14 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
 
+/**
+ * Record for all equations.
+ *
+ * @param id                    id for the database.
+ * @param equation              equation string.
+ * @param reversePolishNotation rev. Polish notation for equation from EquationParser
+ * @param roots                 all roots of the equation.
+ */
 public record Equation(Integer id, String equation, String reversePolishNotation, Collection<BigDecimal> roots) {
 
 	public void addRoot(BigDecimal root) {

@@ -15,6 +15,12 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 		this.connection = JDBCConnection.getConnection(properties);
 	}
 
+	/**
+	 * Method saves the whole equation into database with roots, if present.
+	 *
+	 * @param equation Equation object to be stored.
+	 * @return id of equation stored, Optional.empty() otherwise.
+	 */
 	@Override
 	public Optional<Integer> saveEquation(Equation equation) {
 
@@ -56,6 +62,12 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 		return optionalId;
 	}
 
+	/**
+	 * Method saves roots of equation.
+	 *
+	 * @param roots roots of equation to be stored.
+	 * @param id    id of equation.
+	 */
 	@Override
 	public void saveRootsOfEquation(Collection<BigDecimal> roots, int id) {
 		String query = """
@@ -76,6 +88,13 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 		}
 	}
 
+
+	/**
+	 * Get the equation object from db by equation string.
+	 *
+	 * @param equationString equation string
+	 * @return Equation object if present, Optional.empty() otherwise.
+	 */
 	@Override
 	public Optional<Equation> getEquationByEquationString(String equationString) {
 		Optional<Equation> optionalEquation = Optional.empty();
@@ -100,6 +119,12 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 		return optionalEquation;
 	}
 
+	/**
+	 * Get all roots of equation from db
+	 *
+	 * @param id id of equation
+	 * @return Collection of roots.
+	 */
 	@Override
 	public Collection<BigDecimal> getRootsByEquationId(int id) {
 
@@ -119,13 +144,18 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 		return roots;
 	}
 
+	/**
+	 * Get all equations from database with their roots.
+	 *
+	 * @return Collection of equations.
+	 */
 	@Override
 	public Collection<Equation> getAllEquations() {
 
 		Collection<Equation> equations;
 
 		String query = "SELECT e.equation_id, equation_string, rev_polish_notation, root_value " +
-				"FROM equations e LEFT JOIN roots r on e.equation_id = r.equation_id";
+				"FROM equations e LEFT JOIN roots r on e.equation_id = r.equation_id ORDER BY e.equation_id";
 
 		try (Statement statement = connection.createStatement();
 			 ResultSet resultSet = statement.executeQuery(query)) {
@@ -138,6 +168,12 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 		return equations;
 	}
 
+	/**
+	 * Get all equations from database, that have 'root' as their root.
+	 *
+	 * @param root specified root to search
+	 * @return Collection of equations with specified root.
+	 */
 	@Override
 	public Collection<Equation> getAllEquationsByRoot(BigDecimal root) {
 
@@ -146,9 +182,9 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 		String query = """
 				SELECT e.equation_id, equation_string, rev_polish_notation, root_value
 				FROM equations e INNER JOIN roots r on e.equation_id = r.equation_id, (
-				    SELECT e.equation_id
-				    FROM equations e INNER JOIN roots r on e.equation_id = r.equation_id WHERE r.root_value='%s'
-				) AS fr WHERE e.equation_id=fr.equation_id;
+				SELECT e.equation_id
+				FROM equations e INNER JOIN roots r on e.equation_id = r.equation_id WHERE r.root_value='%s'
+				) AS fr WHERE e.equation_id=fr.equation_id ORDER BY e.equation_id;
 				""".formatted(root.stripTrailingZeros().toPlainString());
 
 		try (Statement statement = connection.createStatement();
@@ -162,6 +198,14 @@ public class EquationDao implements Dao<Equation, BigDecimal, Integer> {
 		return equations;
 	}
 
+	/**
+	 * Return collection of equation from result set, where roots gained
+	 * from query added to equation object.
+	 *
+	 * @param resultSet resultSet of query.
+	 * @return collection of equations with their roots
+	 * @throws SQLException throw if some sql exception occurs
+	 */
 	private Collection<Equation> getEquationsFromResultSet(ResultSet resultSet) throws SQLException {
 
 		Collection<Equation> equations = new ArrayList<>();

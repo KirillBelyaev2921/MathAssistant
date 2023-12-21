@@ -10,14 +10,16 @@ public class EquationView {
 
 	public EquationView(EquationsController controller) {
 
+		// Set up main frame
 		JFrame frame = new JFrame("Math Assistant");
-		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		// Set up main panel in the middle
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 		frame.add(mainPanel, BorderLayout.CENTER);
 
+		// Set up main labels and fields.
 		JLabel equationLabel = new JLabel("Enter the equation:");
 		JTextField equationField = new JTextField(25);
 		mainPanel.add(equationLabel);
@@ -36,22 +38,25 @@ public class EquationView {
 		mainPanel.add(equationsListLabel);
 		mainPanel.add(equationsPane);
 
-		JLabel rootsListLabel = new JLabel("List of equations:");
+		JLabel rootsListLabel = new JLabel("List of roots of equation:");
 		JTextArea roots = new JTextArea(3, 25);
 		JScrollPane rootsPane = new JScrollPane(roots);
 		mainPanel.add(rootsListLabel);
 		mainPanel.add(rootsPane);
 
+		// Set up panel for response at the top.
 		JPanel responsePanel = new JPanel();
 		responsePanel.setLayout(new FlowLayout());
 		JLabel response = new JLabel("Select action.");
 		responsePanel.add(response);
 		frame.add(responsePanel, BorderLayout.NORTH);
 
+		// Set up panel for buttons at the bottom.
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new FlowLayout());
 		frame.add(buttonsPanel, BorderLayout.SOUTH);
 
+		// Set up buttons at the bottom.
 		JButton saveEquation = new JButton("Save equation");
 		saveEquation.addActionListener(e ->
 				response.setText(controller.saveEquation(
@@ -91,6 +96,7 @@ public class EquationView {
 		});
 		buttonsPanel.add(getRootsOfEquation);
 
+		// Display frame.
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);

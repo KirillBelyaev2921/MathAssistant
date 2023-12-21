@@ -12,6 +12,12 @@ To install the project, run following command from MathAssistant folder:
 mvn install
 ```
 
+If test database is not configured, run this instead:
+
+```
+mvn install -Dmaven.test.failure.ignore=true
+```
+
 To run program, run following command:
 ```
 mvn exec:java -Dexec.mainClass=ua.bieliaiev.kyrylo.math_assistant.Main
